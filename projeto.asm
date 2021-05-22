@@ -1,3 +1,7 @@
+; RECOMENDAMOS USAR UM UPDATE FREQ.
+; EM 200 E UTILIZAR O PULSE PARA
+; RECEBIMENTO DOS VALORES
+
 ; When a key is pressed the key number
 ; is placed in R0.
 
@@ -218,7 +222,7 @@ sendCharacter:
 	RET
 
 ;Posiciona o cursor na linha e coluna desejada.
-;Escreva no Acumulador o valor de endereï¿½o da linha e coluna.
+;Escreva no Acumulador o valor de endereço da linha e coluna.
 ;|--------------------------------------------------------------------------------------|
 ;|linha 1 | 00 | 01 | 02 | 03 | 04 |05 | 06 | 07 | 08 | 09 |0A | 0B | 0C | 0D | 0E | 0F |
 ;|linha 2 | 40 | 41 | 42 | 43 | 44 |45 | 46 | 47 | 48 | 49 |4A | 4B | 4C | 4D | 4E | 4F |
@@ -252,7 +256,7 @@ posicionaCursor:
 	CALL delay			; wait for BF to clear
 	RET
 
-;Retorna o cursor para primeira posiï¿½ï¿½o sem limpar o display
+;Retorna o cursor para primeira posição sem limpar o display
 retornaCursor:
 	CLR RS	
 	CLR P1.7		; |
@@ -301,6 +305,10 @@ delay:
 	DJNZ R7, $
 	RET
 
+; nessa função é feita a conversão
+; do valor que é recebido em ASCII
+; para um valor decimal, para ser
+; enviado para o display
 ASCII:
 	MOV 50H, R5
 	MOV R1, #50H
@@ -318,6 +326,9 @@ ASCII:
 	MOV @R1, A
 	RET
 
+; essa função é responsavel por
+; passar os valores recebidos para
+; um vetor de 10 posiçoes
 populaVetor:
 	MOV R0, #51H
 	MOV R1, 52H
@@ -330,10 +341,13 @@ populaVetor:
 	ACALL mostraVetor
 	RET
 
+; aumenta a posição onde sera inserido
+; o valor recebido
 aumentaPosVetor:
 	INC 52H
 	RET
 
+; ordena o vetor utilizando buble sort
 bubleSort:
 	MOV R3, #09
 	reset:
@@ -355,6 +369,8 @@ bubleSort:
 	DJNZ R3, reset
 	RET
 
+; após 10 valores recebido,
+; mostra os valores no display
 mostraVetor:
 	MOV R1, #30H
 	MOV R2, #00H
